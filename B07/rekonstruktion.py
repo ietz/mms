@@ -3,31 +3,30 @@ import matplotlib.pyplot as plt
 
 
 def main():
-    fig, axs = plt.subplots(3, 1, figsize=(6, 6))
+    ks = [1, 2, 3]
+    x = np.linspace(-6, 6, 5000)
+
+    fig, axs = plt.subplots(len(ks), 1, figsize=(6, 6))
     axs = axs.ravel()
 
+    for i, k in enumerate(ks):
+        ax = axs[i]
+        ax.set_title("l={}".format(2*k+1))
 
+        s_reconstructed = np.zeros_like(x)
+        for offset in np.arange(-k, k+1):
+            sinc = np.sinc(x + offset)
+            s_reconstructed += sinc
+            ax.plot(x, sinc, '--')
 
-    zeichne(1)
-    zeichne(2)
-    zeichne(3)
+        s = np.ones_like(x)
 
+        ax.plot(x, s)
+        ax.plot(x, s_reconstructed, linewidth=2)
+        ax.grid(True, which='both', linestyle='dashed')
+        ax.axhline(y=0, color='k')
+        ax.axvline(x=0, color='k')
 
-def zeichne(k):
-    plt.gcf().set_size_inches(10, 3)
-
-    x = np.linspace(-6, 6, 5000)
-    fR = np.zeros_like(x)
-
-    for offset in np.arange(-k, k+1):
-        sinc = np.sinc(x + offset)
-        fR += sinc
-        plt.plot(x, sinc, '--')
-
-    s = np.ones_like(x)
-    plt.plot(x, s)
-
-    plt.plot(x, fR)
     plt.show()
 
 
